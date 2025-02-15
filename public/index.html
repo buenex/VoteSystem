@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Votação</title>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <h1>Sistema de Votação</h1>
+  <form id="voteForm">
+    <label for="tower">Torre:</label>
+    <select id="tower" required>
+      <option>01</option>
+      <option>02</option>
+    </select type="text"  required>
+    <label for="apartment">Apartamento:</label>
+    <select id="apartment" required>
+      <option>01</option>
+      <option>02</option>
+      <option>03</option>
+      <option>04</option>
+      <option>05</option>
+      <option>06</option>
+      <option>101</option>
+      <option>102</option>
+      <option>103</option>
+      <option>104</option>
+      <option>105</option>
+      <option>106</option>
+      <option>107</option>
+      <option>108</option>
+      <option>201</option>
+      <option>202</option>
+      <option>203</option>
+      <option>204</option>
+      <option>205</option>
+      <option>206</option>
+      <option>207</option>
+      <option>208</option>
+      <option>301</option>
+      <option>302</option>
+      <option>303</option>
+      <option>304</option>
+      <option>305</option>
+      <option>306</option>
+      <option>307</option>
+      <option>308</option>
+      <option>401</option>
+      <option>402</option>
+      <option>403</option>
+      <option>404</option>
+      <option>405</option>
+      <option>406</option>
+      <option>407</option>
+      <option>408</option>
+      <option>501</option>
+      <option>502</option>
+      <option>503</option>
+      <option>504</option>
+      <option>505</option>
+      <option>506</option>
+      <option>507</option>
+      <option>508</option>
+      <option>601</option>
+      <option>602</option>
+      <option>603</option>
+      <option>604</option>
+      <option>605</option>
+      <option>606</option>
+      <option>607</option>
+      <option>608</option>
+      <option>701</option>
+      <option>702</option>
+      <option>703</option>
+      <option>704</option>
+      <option>705</option>
+      <option>706</option>
+      <option>707</option>
+      <option>708</option>
+      <option>801</option>
+      <option>802</option>
+      <option>803</option>
+      <option>804</option>
+      <option>805</option>
+      <option>806</option>
+      <option>807</option>
+      <option>808</option>
+      <option>901</option>
+      <option>902</option>
+      <option>903</option>
+      <option>904</option>
+      <option>905</option>
+      <option>906</option>
+      <option>907</option>
+      <option>908</option>
+      <option>1001</option>
+      <option>1002</option>
+      <option>103</option>
+      <option>1004</option>
+      <option>1005</option>
+      <option>1006</option>
+      <option>1007</option>
+      <option>1008</option>
+      <option>1101</option>
+      <option>1102</option>
+      <option>1103</option>
+      <option>1104</option>
+      <option>1105</option>
+      <option>1106</option>
+      <option>1107</option>
+      <option>1108</option>
+      <option>1201</option>
+      <option>1202</option>
+      <option>1203</option>
+      <option>1204</option>
+      <option>1205</option>
+      <option>1206</option>
+      <option>1207</option>
+      <option>1208</option>
+      <option>1301</option>
+      <option>1302</option>
+      <option>1303</option>
+      <option>1304</option>
+      <option>1305</option>
+      <option>1306</option>
+      <option>1307</option>
+      <option>1308</option>
+      <option>1401</option>
+      <option>1402</option>
+      <option>1403</option>
+      <option>1404</option>
+      <option>1405</option>
+      <option>1406</option>
+      <option>1407</option>
+      <option>1408</option>
+      <option>1501</option>
+      <option>1502</option>
+      <option>1503</option>
+      <option>1504</option>
+      <option>1505</option>
+      <option>1506</option>
+      <option>1507</option>
+      <option>1508</option>
+      <option>1601</option>
+      <option>1602</option>
+      <option>1603</option>
+      <option>1604</option>
+      <option>1605</option>
+      <option>1606</option>
+      <option>1607</option>
+      <option>1608</option>
+    </select type="text"  required>
+    <label for="vote">Voto:</label>
+    <input type="text" id="vote" required>
+    <button type="submit">Votar</button>
+  </form>
+
+  <h2>Resultados:</h2>
+  <ul id="results"></ul>
+
+  <script>
+    const socket = io();
+
+    document.getElementById('voteForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const tower = document.getElementById('tower').value;
+      const apartment = document.getElementById('apartment').value;
+      const vote = document.getElementById('vote').value;
+
+      socket.emit('vote', { tower, apartment, vote });
+
+      document.getElementById('voteForm').reset();
+    });
+
+    socket.on('voteCount', (votes) => {
+      const results = document.getElementById('results');
+      results.innerHTML = '';
+      for (const [item, count] of Object.entries(votes)) {
+        const li = document.createElement('li');
+        li.textContent = `${item}: ${count} votos`;
+        results.appendChild(li);
+      }
+    });
+  </script>
+</body>
+</html>
